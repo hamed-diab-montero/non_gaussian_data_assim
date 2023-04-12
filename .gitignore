@@ -23,13 +23,16 @@ pff/lorenz_96/stationary/prior_l96_40_100_particles.txt
 #  agmf
 #
 
-agmf/lorenz_96/chaos/results_rmse/
+agmf/lorenz_96/chaos_obs_den/results_rmse/
+agmf/lorenz_96/chaos_obs_err/results_rmse/
+agmf/lorenz_96/chaos_obs_freq/results_rmse/
+
 agmf/lorenz_96/periodic/results_rmse/
 agmf/lorenz_96/stationary/results_rmse/
 
-agmf/lorenz_96/chaos/l96_40_model_100000.txt
-agmf/lorenz_96/chaos/obs_l96_40_100000.txt
-agmf/lorenz_96/chaos/prior_l96_40_100_particles.txt
+agmf/lorenz_96/chaos_obs_den/l96_40_model_100000.txt
+agmf/lorenz_96/chaos_obs_den/obs_l96_40_100000.txt
+agmf/lorenz_96/chaos_obs_den/prior_l96_40_100_particles.txt
 
 agmf/lorenz_96/periodic/l96_40_model_100000.txt
 agmf/lorenz_96/periodic/obs_l96_40_100000.txt
