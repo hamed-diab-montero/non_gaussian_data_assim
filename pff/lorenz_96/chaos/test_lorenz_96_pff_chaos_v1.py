@@ -399,91 +399,97 @@ n_obs = np.sum(x_obset[t_first_da, 2:] > -999)
 R=np.eye(n_obs)*r_eps
 R_inv=np.linalg.inv(R)
 
-#-----------------------------------------
-# Particle Flow Filter
-#-----------------------------------------
 
-n_mem=100;                  # N - Ensemble size
-                            # Bandwith hyperparameter5
+num_exp=10
+for n_run_exp in range(num_exp):
 
-ctlmean = X_truth[:, 0] + np.random.multivariate_normal(np.zeros(n_x), np.eye(n_x)).T
+    #-----------------------------------------
+    # Particle Flow Filter
+    #-----------------------------------------
 
-# initial condition
-n_t=len(t_truth)
-X_t = np.zeros((n_x, n_mem, n_t))
-Q = 2 * np.eye(n_x)            # background error covariance (only for the initial perturbation)
-Q_inv = np.linalg.inv(Q)
-X_t[:,:,0] = np.random.multivariate_normal(ctlmean, Q, n_mem).T
+    n_mem=100;                  # N - Ensemble size
+                                # Bandwith hyperparameter5
 
-X_0 = np.loadtxt('prior_l96_40_100_particles.txt')
-# X_t[:,:,0] = X_0.copy()
+    ctlmean = X_truth[:, 0] + np.random.multivariate_normal(np.zeros(n_x), np.eye(n_x)).T
 
-t = warm_nt+1
-# We will assimilate this number of steps
-# t_assim < len(t_truth)-obs_rate 
-t_assim = len(t_truth)-50
+    # initial condition
+    n_t=len(t_truth)
+    X_t = np.zeros((n_x, n_mem, n_t))
+    Q = 2 * np.eye(n_x)            # background error covariance (only for the initial perturbation)
+    Q_inv = np.linalg.inv(Q)
+    X_t[:,:,0] = np.random.multivariate_normal(ctlmean, Q, n_mem).T
 
-for k in range(warm_nt):
-    X_t[:,:,k+1] = L96_RK4_ensemble(X_t[:,:,k], tstep, F)
+    X_0 = np.loadtxt('prior_l96_40_100_particles.txt')
+    # X_t[:,:,0] = X_0.copy()
 
-max_s=70
-pseudoflow_l96=[]
+    t = warm_nt+1
+    # We will assimilate this number of steps
+    # t_assim < len(t_truth)-obs_rate 
+    t_assim = len(t_truth)-50
 
-d = t_first_da
+    for k in range(warm_nt):
+        X_t[:,:,k+1] = L96_RK4_ensemble(X_t[:,:,k], tstep, F)
 
-# K_gain_t = np.zeros((n_x, n_x, len(t_obs)))
+    max_s=70
+    pseudoflow_l96=[]
 
-# n_t=len(t_truth)-warm_nt-1
+    d = t_first_da
 
-# t_assim=1500 # Just for texting
+    # K_gain_t = np.zeros((n_x, n_x, len(t_obs)))
 
-while t*tstep < t_assim*tstep:
+    # n_t=len(t_truth)-warm_nt-1
+
+    # t_assim=1500 # Just for texting
+
+    while t*tstep < t_assim*tstep:
+        
+        t_analysis = int(np.ceil(t_obs[d]/tstep))
     
-    t_analysis = int(np.ceil(t_obs[d]/tstep))
-  
-    # I need to start in k-1 beacause of the index system of python
-    # We need to stop in t_analysis because of the index system of python
-    for k in range(t, t_analysis,1):
-        X_t[:,:,k] = L96_RK4_ensemble(X_t[:,:,k-1], tstep, F)
-   
-    t = t_analysis
-
-    # Observations
-    y_t = np.zeros((n_obs, 1))
-    index_obs = np.where(x_obset[d, 2:] > -999)[0] # Experiment specific
-    #y_t[:, 0] = x_obset[d, 2:] # Experiment specific
-    y_t[:, 0] = x_obset[d, 2:][index_obs] # Experiment specific
-
-    pseudoflow= pff(n_mem, n_x, X_t[:, :, t-1], x_obset[d, 2:], r_eps, index_obs)
-    pseudoflow_l96.append(pseudoflow.copy())
-     
-    X_t[:, :, t-1] =  pseudoflow[:,:,-1]
- 
-    print(f'Finished with {int(t_analysis)}')
+        # I need to start in k-1 beacause of the index system of python
+        # We need to stop in t_analysis because of the index system of python
+        for k in range(t, t_analysis,1):
+            X_t[:,:,k] = L96_RK4_ensemble(X_t[:,:,k-1], tstep, F)
     
-    d += 1
+        t = t_analysis
+
+        # Observations
+        y_t = np.zeros((n_obs, 1))
+        index_obs = np.where(x_obset[d, 2:] > -999)[0] # Experiment specific
+        #y_t[:, 0] = x_obset[d, 2:] # Experiment specific
+        y_t[:, 0] = x_obset[d, 2:][index_obs] # Experiment specific
+
+        pseudoflow= pff(n_mem, n_x, X_t[:, :, t-1], x_obset[d, 2:], r_eps, index_obs)
+        pseudoflow_l96.append(pseudoflow.copy())
+        
+        X_t[:, :, t-1] =  pseudoflow[:,:,-1]
     
-print('Finished with the estimation')
+        print(f'Finished with {int(t_analysis)}')
+        
+        d += 1
+        
+    print('Finished with the estimation')
 
-#
-#  RMSE CALCULATION
-#
+    #
+    #  RMSE CALCULATION
+    #
 
-X_t_mean=np.mean(X_t,axis=1)
-print(X_t_mean.shape)
+    X_t_mean=np.mean(X_t,axis=1)
+    print(X_t_mean.shape)
 
-error_x_t=np.zeros((n_x,len(t_truth)))
-for i in range(n_x):
-    error_x_t[i,:]=(X_t_mean[i,:]-X_truth[i,:])**2
-    
-rmse_x_t=np.sqrt((1/n_x)*np.sum(error_x_t,axis=0))
+    error_x_t=np.zeros((n_x,len(t_truth)))
+    for i in range(n_x):
+        error_x_t[i,:]=(X_t_mean[i,:]-X_truth[i,:])**2
+        
+    rmse_x_t=np.sqrt((1/n_x)*np.sum(error_x_t,axis=0))
 
-# SAVE FILES
-n_run_exp='01'
+    # SAVE FILES
+    #n_run_exp='01'
 
-filename='./results_rmse/rmse_l96_periodic_obs_den_01_run_'+n_run_exp+'.txt'
-results_rmse=np.zeros((len(t_truth),2))
-results_rmse[:,0]=t_truth[:]
-results_rmse[:,1]=rmse_x_t[:]
+    filename='./results_rmse/rmse_l96_chaotic_obs_den_01_run_'+str(n_run_exp+1).zfill(2)+'.txt'
+    results_rmse=np.zeros((len(t_truth),2))
+    results_rmse[:,0]=t_truth[:]
+    results_rmse[:,1]=rmse_x_t[:]
 
-np.savetxt(filename,results_rmse)
+    np.savetxt(filename,results_rmse)
+
+    print('Finished with the experiment number '+str(n_run_exp+1).zfill(2))
