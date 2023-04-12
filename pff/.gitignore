@@ -1,4 +1,7 @@
 lorenz_96/chaos/results_rmse/
 lorenz_96/periodic/results_rmse/
 lorenz_96/stationary/results_rmse/
+lorenz_96/chaos/l96_40_model_100000.txt
+lorenz_96/chaos/obs_l96_40_100000.txt
+lorenz_96/chaos/prior_l96_40_100_particles.txt
 
