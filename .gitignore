@@ -1,16 +1,50 @@
+#
+#  pff
+#
+
 pff/lorenz_96/chaos/results_rmse/
 pff/lorenz_96/periodic/results_rmse/
 pff/lorenz_96/stationary/results_rmse/
+
 pff/lorenz_96/chaos/l96_40_model_100000.txt
 pff/lorenz_96/chaos/obs_l96_40_100000.txt
 pff/lorenz_96/chaos/prior_l96_40_100_particles.txt
 
+pff/lorenz_96/periodic/l96_40_model_100000.txt
+pff/lorenz_96/periodic/obs_l96_40_100000.txt
+pff/lorenz_96/periodic/prior_l96_40_100_particles.txt
+
+pff/lorenz_96/stationary/l96_40_model_100000.txt
+pff/lorenz_96/stationary/obs_l96_40_100000.txt
+pff/lorenz_96/stationary/prior_l96_40_100_particles.txt
+
+
+#
+#  agmf
+#
+
 agmf/lorenz_96/chaos/results_rmse/
 agmf/lorenz_96/periodic/results_rmse/
 agmf/lorenz_96/stationary/results_rmse/
+
 agmf/lorenz_96/chaos/l96_40_model_100000.txt
 agmf/lorenz_96/chaos/obs_l96_40_100000.txt
 agmf/lorenz_96/chaos/prior_l96_40_100_particles.txt
+
+agmf/lorenz_96/periodic/l96_40_model_100000.txt
+agmf/lorenz_96/periodic/obs_l96_40_100000.txt
+agmf/lorenz_96/periodic/prior_l96_40_100_particles.txt
+
+agmf/lorenz_96/stationary/l96_40_model_100000.txt
+agmf/lorenz_96/stationary/obs_l96_40_100000.txt
+agmf/lorenz_96/stationary/prior_l96_40_100_particles.txt
+
+
+
+
+#
+# enkf
+#
 
 enkf/lorenz_96/chaos/results_rmse/
 enkf/lorenz_96/periodic/results_rmse/
@@ -18,6 +52,14 @@ enkf/lorenz_96/stationary/results_rmse/
 enkf/lorenz_96/chaos/l96_40_model_100000.txt
 enkf/lorenz_96/chaos/obs_l96_40_100000.txt
 enkf/lorenz_96/chaos/prior_l96_40_100_particles.txt
+
+enkf/lorenz_96/periodic/l96_40_model_100000.txt
+enkf/lorenz_96/periodic/obs_l96_40_100000.txt
+enkf/lorenz_96/periodic/prior_l96_40_100_particles.txt
+
+enkf/lorenz_96/stationary/l96_40_model_100000.txt
+enkf/lorenz_96/stationary/obs_l96_40_100000.txt
+enkf/lorenz_96/stationary/prior_l96_40_100_particles.txt
 
 
 
