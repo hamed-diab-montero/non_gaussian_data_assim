@@ -61,7 +61,9 @@ enkf/lorenz_96/stationary/l96_40_model_100000.txt
 enkf/lorenz_96/stationary/obs_l96_40_100000.txt
 enkf/lorenz_96/stationary/prior_l96_40_100_particles.txt
 
-
+# Slurm output files
+*.out
+*.err
 
 # Default gitignore
 # Byte-compiled / optimized / DLL files
